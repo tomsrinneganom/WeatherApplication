@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="Api_Key_Openweather">c208ce39b53a16d9df2fdb2e29a36d24</string>
+
+    <string name="Monday">%d Monday</string>
+    <string name="Tuesday">%d Tuesday</string>
+    <string name="Wednesday">%d Wednesday</string>
+    <string name="Thursday">%d Thursday</string>
+    <string name="Friday">%d Friday</string>
+    <string name="Saturday">%d Saturday</string>
+    <string name="Sunday">%d Sunday</string>
+
+    <string name="Morning">Morning</string>
+    <string name="Day">Morning</string>
+    <string name="Evening">Evening</string>
+    <string name="Night">Night</string>
+
+    <string name="temperature">%d \u00B0</string>
+</resources>

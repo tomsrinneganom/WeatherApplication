@@ -1,0 +1,45 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Launcher" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:statusBarColor">@color/yellow_primary_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.WeatherApplication" parent="Theme.MaterialComponents.DayNight">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_200</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/yellow_primary_color</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="Theme.Sun" parent="Theme.WeatherApplication">
+        <item name="colorTextPrimary">@color/black</item>
+        <item name="colorBackgroundPrimary">@color/yellow_primary_color</item>
+        <item name="colorBackgroundSecondary">@color/yellow_secondary_color</item>
+    </style>
+
+    <style name="Theme.Cloudy" parent="Theme.WeatherApplication">
+        <item name="android:statusBarColor">@color/blue_primary_color</item>
+        <item name="colorTextPrimary">@color/black</item>
+        <item name="colorBackgroundPrimary">@color/blue_primary_color</item>
+        <item name="colorBackgroundSecondary">@color/blue_secondary_color</item>
+
+    </style>
+
+    <style name="Theme.Night" parent="Theme.WeatherApplication">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/night_primary_color</item>
+        <item name="colorTextPrimary">@color/white</item>
+        <item name="colorBackgroundPrimary">@color/night_primary_color</item>
+        <item name="colorBackgroundSecondary">@color/night_secondary_color</item>
+    </style>
+
+</resources>

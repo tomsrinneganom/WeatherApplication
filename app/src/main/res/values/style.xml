@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.App.TextView" parent="Widget.AppCompat.TextView">
+        <item name="android:fontFamily">@font/rubik_medium</item>
+        <item name="android:textColor">?attr/colorTextPrimary</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:elevation">3dp</item>
+    </style>
+
+    <style name="Widget.App.TextView.SmallText" parent="Widget.App.TextView">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Widget.App.TextView.MiddleText" parent="Widget.App.TextView">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">?attr/colorBackgroundSecondary</item>
+    </style>
+
+</resources>
