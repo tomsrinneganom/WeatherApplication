@@ -1,38 +1,43 @@
 package com.example.weatherapplication
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.room.Room
 import com.example.weatherapplication.data.CurrentForecast
-import com.example.weatherapplication.data.ForecastForTheDay
+import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ForecastViewModel : ViewModel() {
-    private val _forecastForTheDayState = MutableStateFlow<List<ForecastForTheDay>>(emptyList())
+@HiltViewModel
+class ForecastViewModel @Inject constructor(private val repository: Repository): ViewModel() {
+
+    private val _forecastForTheDaysOfTheWeek =
+        MutableStateFlow<List<ForecastForDaysOfTheWeek>>(emptyList())
     private val _currentForecastState = MutableStateFlow<CurrentForecast?>(null)
-    val forecastForTheDayState = _forecastForTheDayState.asStateFlow()
+
+    val forecastForTheDaysOfTheWeek = _forecastForTheDaysOfTheWeek.asStateFlow()
     val currentForecastState = _currentForecastState.asStateFlow()
 
-    fun getForecast() {
+    fun getForecast(context: Context) {
         viewModelScope.launch {
-            _currentForecastState.value =
-                Repository().getCurrentForecast(46.441192, 30.740760)
-            _forecastForTheDayState.value =
-                Repository().getForecastForTheDay(46.441192, 30.740760)
-
+            launch {
+                repository.getCurrentForecast(46.441192, 30.740760, context).collect {
+                    _currentForecastState.value = it
+                }
+            }
+            launch {
+                repository.getForecastForTheDay(46.441192, 30.740760, context).collect {
+                    _forecastForTheDaysOfTheWeek.value = it
+                }
+            }
         }
-    }
-
-    suspend fun getCurrentForecast(): CurrentForecast {
-
-        return Repository().getCurrentForecast(46.441192, 30.740760)
-
-    }
-
-    suspend fun getForecastForeTheDay(): List<ForecastForTheDay> {
-
-        return Repository().getForecastForTheDay(46.441192, 30.740760)
-
     }
 }

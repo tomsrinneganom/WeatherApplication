@@ -1,15 +1,23 @@
 package com.example.weatherapplication.data
 
 import android.content.res.Resources
-import com.example.weatherapplication.enums.PartOfDay
+import android.util.Log
+import androidx.room.Entity
+import com.example.weatherapplication.enums.EnumPartOfDay
 
+@Entity(primaryKeys = ["date", "partOfTheDay"])
 class ForecastByPartsOfTheDay(
-    private val partOfTheDay: String,
+    val partOfTheDay: String,
     temperature: Int,
-) : Forecast(temperature) {
+    date: Long,
+) : AbstractForecast(temperature, date) {
 
-    override fun getTime(resources: Resources): String {
-        return PartOfDay.valueOf(partOfTheDay).getResourceString(resources)
+    fun getPartOfTheDay(resources: Resources): String {
+        return try {
+            EnumPartOfDay.valueOf(partOfTheDay).getResourceString(resources)
+        } catch (e: Exception) {
+            Log.e("Log_tag_ForecastByPartsOfTheDay", "getPartOfTheDay() exception: $e")
+            "Error"
+        }
     }
-
 }

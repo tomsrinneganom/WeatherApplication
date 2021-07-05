@@ -15,18 +15,17 @@ class HourlyForecastAdapter(private val forecastList: List<HourlyForecast>) :
     class HourlyForecastHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(forecast: HourlyForecast) {
-
             itemView.findViewById<TextView>(R.id.timeOfDayTextView).text =
-                forecast.getTime(itemView.resources)
+                forecast.getHourAndMinute()
 
             itemView.findViewById<TextView>(R.id.degreesCelsiusTextView).text =
                 forecast.getTemperature(itemView.resources)
 
             itemView.findViewById<ImageView>(R.id.weatherIconsImageView).setImageDrawable(
-                forecast.getWeatherIcon(itemView.context)
+                forecast.getDrawableWeatherIcon(itemView.context)
             )
-
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = HourlyForecastHolder(

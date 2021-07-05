@@ -4,31 +4,33 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
-open class HourlyForecast(
-    private val hour: Int,
-    private val minute: Int,
+@Entity(primaryKeys = ["date"])
+class HourlyForecast(
+    date: Long,
     temperature: Int,
-    protected val weatherIcon: Int,
-) : Forecast(temperature) {
+    weatherIcon: Int,
+    var parentDate: Long,
+) : AbstractForecastWithWeatherIcon(temperature, date, weatherIcon) {
 
-    override fun getTime(resources: Resources): String {
+
+    fun getHourAndMinute(): String {
+        val dateTime = getDateTime()
+        val hour = dateTime.hour
+        val minute = dateTime.minute
+
         var result = ""
-        result += if (hour < 10) {
-            "0$hour:"
-        } else {
-            "$hour:"
-        }
-        result += if (minute < 10) {
-            "${minute}0"
-        } else {
-            "$minute"
-        }
+        result += if (hour < 10) "0$hour:" else "$hour:"
+        result += if (minute < 10) "${minute}0" else "$minute"
+
         return result
     }
 
-    fun getWeatherIcon(context: Context): Drawable? {
-        return ContextCompat.getDrawable(context, weatherIcon)
-    }
 }
 

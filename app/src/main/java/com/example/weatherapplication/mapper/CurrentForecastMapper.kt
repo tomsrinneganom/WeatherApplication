@@ -1,27 +1,24 @@
 package com.example.weatherapplication.mapper
 
 import com.example.weatherapplication.data.CurrentForecast
+import com.example.weatherapplication.data.ForecastForTheDay
 import com.example.weatherapplication.data.HourlyForecast
 import org.json.JSONObject
 import java.time.Instant
 import java.time.ZoneId
 
 class CurrentForecastMapper : AbstractForecastMapper() {
-    fun map(jsonObject: JSONObject, hourlyForecast: List<HourlyForecast>): CurrentForecast {
-
+    fun map(jsonObject: JSONObject): CurrentForecast {
         val jsonCurrentWeather = jsonObject.getJSONObject("current")
 
-        val timezone = jsonObject.getString("timezone")
-        val time =
-            Instant.ofEpochSecond(jsonCurrentWeather.getLong("dt")).atZone(ZoneId.of(timezone))
+        val timeInSecond = jsonCurrentWeather.getLong("dt")
+
+        val forecastForTheDay = ForecastForTheDay(ForecastForTheDay.DATE_CURRENT_FORECAST,temperatureMapper(jsonCurrentWeather.getDouble("temp")),getWeatherIcon(jsonCurrentWeather))
+
+        val hourlyForecast = HourlyForecastMapper().map(jsonObject,ForecastForTheDay.DATE_CURRENT_FORECAST)
 
         return CurrentForecast(
-            time.dayOfMonth,
-            time.dayOfWeek.value,
-            time.hour,
-            time.minute,
-            temperatureMapper(jsonCurrentWeather.getDouble("temp")),
-            getWeatherIcon(jsonCurrentWeather),
+            forecastForTheDay,
             hourlyForecast
         )
 

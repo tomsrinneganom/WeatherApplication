@@ -1,49 +1,42 @@
 package com.example.weatherapplication
 
-import android.util.Log
+import android.content.Context
 import com.example.weatherapplication.data.CurrentForecast
-import com.example.weatherapplication.data.ForecastForTheDay
-import com.example.weatherapplication.data.HourlyForecast
-import com.example.weatherapplication.mapper.AbstractForecastMapper
-import com.example.weatherapplication.mapper.CurrentForecastMapper
-import com.example.weatherapplication.mapper.ForecastForTheDayMapper
-import com.example.weatherapplication.mapper.HourlyForecastMapper
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.json.JSONObject
+import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
+import com.example.weatherapplication.database.Database
+import com.example.weatherapplication.database.localdatabase.RoomDatabaseProvider
+import dagger.hilt.EntryPoint
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import kotlin.random.Random
 
-private const val apiKey = "c208ce39b53a16d9df2fdb2e29a36d24"
+class Repository @Inject constructor(private val databaseProvider: RoomDatabaseProvider){
 
-class Repository {
-
-    private suspend fun getForecast(lat: Double, lng: Double): String {
-        var json: String
-        withContext(Dispatchers.IO) {
-            val client = HttpClient(CIO)
-            val result =
-                client.get<HttpResponse>("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lng&units=metric&appid=$apiKey")
-            Log.i("Log_tag", "result JSON :${result}")
-            Log.i("Log_tag", "result raw body :${result.receive<String>()}")
-            json = result.receive()
-            client.close()
+    suspend fun getCurrentForecast(
+        lat: Double,
+        lng: Double,
+        context: Context,
+    ): Flow<CurrentForecast> {
+        return flow {
+            emit(databaseProvider.getCurrentForecast(context))
+            val resultFromDatabase = Database(lat, lng).getCurrentForecast()
+            emit(resultFromDatabase)
+            databaseProvider.insertCurrentForecast(context, resultFromDatabase)
         }
-        return json
     }
 
-    suspend fun getCurrentForecast(lat: Double, lng: Double): CurrentForecast {
-        val jsonObject = JSONObject(getForecast(lat, lng))
-        val hourlyForecast = HourlyForecastMapper().map(jsonObject)
-        return CurrentForecastMapper().map(jsonObject, hourlyForecast)
-    }
-
-    suspend fun getForecastForTheDay(lat: Double, lng: Double): List<ForecastForTheDay> {
-        val json= getForecast(lat, lng)
-        return ForecastForTheDayMapper().mapList(json)
+    suspend fun getForecastForTheDay(
+        lat: Double,
+        lng: Double,
+        context: Context,
+    ): Flow<List<ForecastForDaysOfTheWeek>> {
+        return flow {
+            emit(databaseProvider.getForecastForDaysOfTheWeek(context))
+            val resultFromDatabase = Database(lat, lng).getForecastForDaysOfTheWeek()
+            emit(resultFromDatabase)
+            databaseProvider.insertForecastForDaysOfTheWeek(context, resultFromDatabase)
+        }
     }
 
 }

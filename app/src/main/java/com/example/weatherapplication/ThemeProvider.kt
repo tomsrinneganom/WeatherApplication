@@ -1,27 +1,41 @@
 package com.example.weatherapplication
 
-object ThemeProvider {
+import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import com.example.weatherapplication.data.CurrentForecast
+import kotlinx.coroutines.flow.first
 
-    private var settingsData = 0
+class ThemeProvider(private val dataStore: DataStore<Preferences>) {
 
-    fun getColoredTheme(): Int {
-        return when (settingsData) {
-            0 -> {
-                R.style.Theme_Cloudy
-            }
-            1 -> {
+
+    suspend fun getTheme(): Int {
+        return dataStore.data.first()[THEME_PREFERENCES_KEY] ?: R.style.Theme_Cloudy
+    }
+
+    suspend fun checkMatchingThemeAndWeather(currentForecast: CurrentForecast): Boolean {
+        val oldTheme = dataStore.data.first()[THEME_PREFERENCES_KEY] ?: 0
+
+        val theme = when (currentForecast.forecastForTheDay.weatherIcon) {
+            R.drawable.ic_sun -> {
                 R.style.Theme_Sun
             }
-            else -> R.style.Theme_Night
+            R.drawable.ic_night -> {
+                R.style.Theme_Night
+            }
+            else -> {
+                R.style.Theme_Cloudy
+            }
         }
+        dataStore.edit {
+            it[THEME_PREFERENCES_KEY] = theme
+        }
+        return oldTheme == theme
     }
 
-    fun switchColor() {
-        settingsData = if (settingsData + 1 > 2) {
-            0
-        } else {
-            settingsData + 1
-        }
+    companion object {
+        private val THEME_PREFERENCES_KEY = intPreferencesKey("theme_style")
     }
-
 }
