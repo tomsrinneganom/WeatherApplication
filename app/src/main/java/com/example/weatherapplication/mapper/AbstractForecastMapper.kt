@@ -1,15 +1,7 @@
 package com.example.weatherapplication.mapper
 
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.CurrentForecast
-import com.example.weatherapplication.data.ForecastByPartsOfTheDay
-import com.example.weatherapplication.data.ForecastForTheDay
-import com.example.weatherapplication.data.HourlyForecast
-import com.example.weatherapplication.enums.PartOfDay
 import org.json.JSONObject
-import java.time.*
-
-private const val MIN_NUMBER_OF_HOURLY_FORECAST = 16
 
 abstract class AbstractForecastMapper {
 
@@ -25,7 +17,7 @@ abstract class AbstractForecastMapper {
 
     }
 
-    protected fun weatherMapper(weatherId: Int, partOfTheDay: Char): Int {
+    private fun weatherMapper(weatherId: Int, partOfTheDay: Char): Int {
         return when (weatherId) {
             in 200..232 -> R.drawable.ic_storm
             in 300..321 -> R.drawable.ic_rain

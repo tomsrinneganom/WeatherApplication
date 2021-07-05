@@ -1,14 +1,12 @@
 package com.example.weatherapplication.mapper
 
 import com.example.weatherapplication.data.ForecastByPartsOfTheDay
-import com.example.weatherapplication.enums.PartOfDay
+import com.example.weatherapplication.enums.EnumPartOfDay
 import org.json.JSONObject
-import java.time.Instant
-import java.time.ZoneId
 
 class ForecastByPartsOfTheDayMapper : AbstractForecastMapper() {
 
-    fun map(jsonTemperature: JSONObject): List<ForecastByPartsOfTheDay> {
+    fun map(jsonTemperature: JSONObject, parentDate: Long): List<ForecastByPartsOfTheDay> {
 
         val morningTemperature = temperatureMapper(jsonTemperature.getDouble("morn"))
         val dayTemperature = temperatureMapper(jsonTemperature.getDouble("day"))
@@ -16,10 +14,10 @@ class ForecastByPartsOfTheDayMapper : AbstractForecastMapper() {
         val nightTemperature = temperatureMapper(jsonTemperature.getDouble("night"))
 
         return listOf(
-            ForecastByPartsOfTheDay(PartOfDay.MORNING.name, morningTemperature),
-            ForecastByPartsOfTheDay(PartOfDay.DAY.name, dayTemperature),
-            ForecastByPartsOfTheDay(PartOfDay.EVENING.name, eveningTemperature),
-            ForecastByPartsOfTheDay(PartOfDay.NIGHT.name, nightTemperature)
+            ForecastByPartsOfTheDay(EnumPartOfDay.MORNING.name, morningTemperature, parentDate),
+            ForecastByPartsOfTheDay(EnumPartOfDay.DAY.name, dayTemperature, parentDate),
+            ForecastByPartsOfTheDay(EnumPartOfDay.EVENING.name, eveningTemperature, parentDate),
+            ForecastByPartsOfTheDay(EnumPartOfDay.NIGHT.name, nightTemperature, parentDate)
         )
     }
 

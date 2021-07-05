@@ -6,36 +6,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
-import com.example.weatherapplication.data.ForecastByPartsOfTheDay
-import com.example.weatherapplication.data.ForecastForTheDay
-import com.example.weatherapplication.utils.ForecastUtils
+import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
 
 
-class ListByDayAdapter(private val forecastList: List<ForecastForTheDay>) :
+class ListByDayAdapter(private val forecastList: List<ForecastForDaysOfTheWeek>) :
     RecyclerView.Adapter<ListByDayAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(forecast: ForecastForTheDay) {
-            val utils = ForecastUtils()
+        fun bind(forecast: ForecastForDaysOfTheWeek) {
+
             itemView.findViewById<TextView>(R.id.dateTextView).text =
-                forecast.getDate(itemView.resources)
+                forecast.forecastForTheDay.getDate(itemView.resources)
 
             itemView.findViewById<TextView>(R.id.degreesCelsiusTextView).text =
-                forecast.getTemperature(itemView.resources)
+                forecast.forecastForTheDay.getTemperature(itemView.resources)
 
             itemView.findViewById<ImageView>(R.id.weatherIconsImageView).setImageDrawable(
-                forecast.getWeatherIcon(itemView.context)
+                forecast.forecastForTheDay.getDrawableWeatherIcon(itemView.context)
             )
-
 
             val recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView)
 
-            val adapter = ForecastByPartsOfTheDayAdapter(forecast.hourlyForecast)
+            val adapter = ForecastByPartsOfTheDayAdapter(forecast.forecastByPartsOfTheDay)
 
             recyclerView.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)

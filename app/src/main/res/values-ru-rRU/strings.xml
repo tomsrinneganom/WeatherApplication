@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Monday">Пн. %d</string>
+    <string name="Tuesday">Вт.%d</string>
+    <string name="Wednesday">Ср. %d</string>
+    <string name="Thursday">Чт. %d</string>
+    <string name="Friday">Пт. %d</string>
+    <string name="Saturday">Сб. %d</string>
+    <string name="Sunday">Вс. %d</string>
+    <string name="Morning">Утро</string>
+    <string name="Day">День</string>
+    <string name="Evening">Вечер</string>
+    <string name="Night">Ночь</string>
+</resources>
