@@ -4,14 +4,20 @@ import android.content.Context
 import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
 import com.example.weatherapplication.database.Database
+import com.example.weatherapplication.database.IDatabase
+import com.example.weatherapplication.database.localdatabase.ILocalDatabaseProvider
 import com.example.weatherapplication.database.localdatabase.RoomDatabaseProvider
 import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import kotlin.random.Random
 
-class Repository @Inject constructor(private val databaseProvider: RoomDatabaseProvider){
+class Repository @Inject constructor(
+    private val localDatabaseProvider: ILocalDatabaseProvider,
+    private val database: IDatabase,
+) {
 
     suspend fun getCurrentForecast(
         lat: Double,
@@ -19,10 +25,10 @@ class Repository @Inject constructor(private val databaseProvider: RoomDatabaseP
         context: Context,
     ): Flow<CurrentForecast> {
         return flow {
-            emit(databaseProvider.getCurrentForecast(context))
-            val resultFromDatabase = Database(lat, lng).getCurrentForecast()
+            emit(localDatabaseProvider.getCurrentForecast(context))
+            val resultFromDatabase = database.getCurrentForecast(lat, lng)
             emit(resultFromDatabase)
-            databaseProvider.insertCurrentForecast(context, resultFromDatabase)
+            localDatabaseProvider.insertCurrentForecast(context, resultFromDatabase)
         }
     }
 
@@ -32,10 +38,10 @@ class Repository @Inject constructor(private val databaseProvider: RoomDatabaseP
         context: Context,
     ): Flow<List<ForecastForDaysOfTheWeek>> {
         return flow {
-            emit(databaseProvider.getForecastForDaysOfTheWeek(context))
-            val resultFromDatabase = Database(lat, lng).getForecastForDaysOfTheWeek()
+            emit(localDatabaseProvider.getForecastForDaysOfTheWeek(context))
+            val resultFromDatabase = database.getForecastForDaysOfTheWeek(lat, lng)
             emit(resultFromDatabase)
-            databaseProvider.insertForecastForDaysOfTheWeek(context, resultFromDatabase)
+            localDatabaseProvider.insertForecastForDaysOfTheWeek(context, resultFromDatabase)
         }
     }
 

@@ -9,19 +9,23 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.adapter.HourlyForecastAdapter
 import com.example.weatherapplication.adapter.ListByDayAdapter
 import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
+import com.example.weatherapplication.extensions.collect
 import com.example.weatherapplication.extensions.recreateSmoothly
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class ForecastFragment : Fragment() {
@@ -33,6 +37,7 @@ class ForecastFragment : Fragment() {
     private var hourlyForecastAdapter: HourlyForecastAdapter? = null
     private var forecastForTheDayAdapter: ListByDayAdapter? = null
     private var currentWeatherImageView: ImageView? = null
+    private var localityTextView: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,8 +48,13 @@ class ForecastFragment : Fragment() {
         currentTemperatureTextView = view.findViewById(R.id.degreesCelsiusTextView)
         currentWeatherImageView = view.findViewById(R.id.weatherIconsImageView)
         hourlyForecastRecyclerView = view.findViewById(R.id.listByDateRecyclerView)
-
         forecastForTheDayRecyclerView = view.findViewById(R.id.listByDayRecyclerView)
+        localityTextView = view.findViewById(R.id.localityTextView)
+
+
+        viewModel.getLocality(requireContext()).onEach {
+            localityTextView?.text = it
+        }.collect(lifecycle)
 
         return view
     }
@@ -80,30 +90,21 @@ class ForecastFragment : Fragment() {
     private fun getForecast() {
         viewModel.getForecast(requireContext())
 
-        lifecycleScope.launch {
-            launch {
-                viewModel.currentForecastState.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                    .collect {
-                        if (it != null) {
-                            if (!ThemeProvider(requireContext().dataStore).checkMatchingThemeAndWeather(it)) {
-                                Log.i("Log_tag", "result ==false")
-                                activity?.recreateSmoothly()
-                            }else
-                                Log.i("Log_tag", "result ==true")
+        viewModel.currentForecastState.onEach {
+            if (it != null) {
+                if (!ThemeProvider(requireContext().dataStore).checkMatchingThemeAndWeather(it)) {
+                    activity?.recreateSmoothly()
+                }
+                bindCurrentWeather(it)
+            }
+        }.collect(lifecycle)
 
-                            bindCurrentWeather(it)
-                        }
-                    }
+        viewModel.forecastForTheDaysOfTheWeek.onEach {
+            if (it.isNotEmpty()) {
+                bindForecastForTheDay(it)
             }
-            launch {
-                viewModel.forecastForTheDaysOfTheWeek.flowWithLifecycle(lifecycle,
-                    Lifecycle.State.STARTED)
-                    .collect {
-                        bindForecastForTheDay(it)
-                    }
-            }
-        }
+        }.collect(lifecycle)
+
     }
-
-
 }
+
