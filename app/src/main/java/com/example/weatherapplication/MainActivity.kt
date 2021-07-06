@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val theme = runBlocking {
             ThemeProvider(applicationContext.dataStore).getTheme()
+//            R.style.Theme_Sun
         }
         setTheme(theme)
         super.onCreate(savedInstanceState)

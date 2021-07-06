@@ -4,11 +4,9 @@ import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
 
 interface IDatabase {
-    val lat: Double
-    val lng: Double
 
-    suspend fun getCurrentForecast(): CurrentForecast
+    suspend fun getCurrentForecast(lat:Double,lng:Double): CurrentForecast
 
-    suspend fun getForecastForDaysOfTheWeek(): List<ForecastForDaysOfTheWeek>
+    suspend fun getForecastForDaysOfTheWeek(lat:Double,lng:Double): List<ForecastForDaysOfTheWeek>
 
 }
