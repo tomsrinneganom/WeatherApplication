@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.*
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.adapter.HourlyForecastAdapter
@@ -19,13 +21,8 @@ import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
 import com.example.weatherapplication.extensions.collect
 import com.example.weatherapplication.extensions.recreateSmoothly
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class ForecastFragment : Fragment() {
@@ -51,40 +48,45 @@ class ForecastFragment : Fragment() {
         forecastForTheDayRecyclerView = view.findViewById(R.id.listByDayRecyclerView)
         localityTextView = view.findViewById(R.id.localityTextView)
 
-
-        viewModel.getLocality(requireContext()).onEach {
-            localityTextView?.text = it
-        }.collect(lifecycle)
-
-        return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getForecast()
-    }
-
-    private fun bindForecastForTheDay(forecastForTheDay: List<ForecastForDaysOfTheWeek>) {
-        forecastForTheDayAdapter = ListByDayAdapter(forecastForTheDay)
+        forecastForTheDayAdapter = ListByDayAdapter()
         forecastForTheDayRecyclerView?.apply {
             adapter = forecastForTheDayAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
-    }
 
-    private fun bindCurrentWeather(forecast: CurrentForecast) {
-        currentTemperatureTextView?.text = forecast.forecastForTheDay.getTemperature(resources)
-
-        currentWeatherImageView?.setImageDrawable(forecast.forecastForTheDay.getDrawableWeatherIcon(
-            requireContext()))
-
-        hourlyForecastAdapter = HourlyForecastAdapter(forecast.hourlyForecast)
+        hourlyForecastAdapter = HourlyForecastAdapter()
         hourlyForecastRecyclerView?.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = hourlyForecastAdapter
         }
+        checkAccessToLocation()
+        return view
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.getLocality(requireContext()).onEach {
+            localityTextView?.text = it
+        }.collect(lifecycle)
+
+        getForecast()
+
+    }
+
+    private fun updateForecastForTheDay(forecastForTheDay: List<ForecastForDaysOfTheWeek>) {
+        forecastForTheDayAdapter?.updateList(forecastForTheDay)
+    }
+
+    private fun updateCurrentWeather(forecast: CurrentForecast) {
+        currentTemperatureTextView?.text = forecast.forecastForTheDay.getTemperature(resources)
+
+        currentWeatherImageView?.setImageDrawable(forecast.forecastForTheDay.getDrawableWeatherIcon(
+            requireContext()))
+
+        hourlyForecastAdapter?.updateList(forecast.hourlyForecast)
     }
 
     private fun getForecast() {
@@ -92,18 +94,24 @@ class ForecastFragment : Fragment() {
 
         viewModel.currentForecastState.onEach {
             if (it != null) {
+                Log.i("Log_tag", " currentForecastState")
                 if (!ThemeProvider(requireContext().dataStore).checkMatchingThemeAndWeather(it)) {
                     activity?.recreateSmoothly()
                 }
-                bindCurrentWeather(it)
+                updateCurrentWeather(it)
             }
         }.collect(lifecycle)
 
         viewModel.forecastForTheDaysOfTheWeek.onEach {
             if (it.isNotEmpty()) {
-                bindForecastForTheDay(it)
+                Log.i("Log_tag", " forecastForTheDaysOfTheWeek")
+                updateForecastForTheDay(it)
             }
         }.collect(lifecycle)
+
+    }
+
+    private fun checkAccessToLocation() {
 
     }
 }

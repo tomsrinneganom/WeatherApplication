@@ -1,7 +1,6 @@
 package com.example.weatherapplication.data
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 
@@ -12,4 +11,13 @@ abstract class AbstractForecastWithWeatherIcon(temperature: Int, date: Long, val
         return ContextCompat.getDrawable(context, weatherIcon)
     }
 
+    fun timeToString(time: Int): String {
+//        val dateTime = getDateTime()
+//        val hour = dateTime.hour
+//        val minute = dateTime.minute
+//
+//        var result = ""
+
+        return if (time < 10) "0$time" else "$time"
+    }
 }

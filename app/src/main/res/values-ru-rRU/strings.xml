@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Monday">Пн. %d</string>
-    <string name="Tuesday">Вт.%d</string>
-    <string name="Wednesday">Ср. %d</string>
-    <string name="Thursday">Чт. %d</string>
-    <string name="Friday">Пт. %d</string>
-    <string name="Saturday">Сб. %d</string>
-    <string name="Sunday">Вс. %d</string>
+
+    <string name="please_turn_on_geolocation">Пожалуйста, включите геолокацию. <br/>Это нужно для корректоного отображения прогноза погоды.</string>
+
+    <string name="Monday">Пн. %s</string>
+    <string name="Tuesday">Вт.%s</string>
+    <string name="Wednesday">Ср. %s</string>
+    <string name="Thursday">Чт. %s</string>
+    <string name="Friday">Пт. %s</string>
+    <string name="Saturday">Сб. %s</string>
+    <string name="Sunday">Вс. %s</string>
+
     <string name="Morning">Утро</string>
     <string name="Day">День</string>
     <string name="Evening">Вечер</string>

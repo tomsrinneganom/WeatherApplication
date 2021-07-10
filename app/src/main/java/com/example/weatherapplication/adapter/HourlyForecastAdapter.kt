@@ -9,8 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.HourlyForecast
 
-class HourlyForecastAdapter(private val forecastList: List<HourlyForecast>) :
+class HourlyForecastAdapter(forecastList: List<HourlyForecast> = emptyList()) :
     RecyclerView.Adapter<HourlyForecastAdapter.HourlyForecastHolder>() {
+
+    private val forecastList = mutableListOf<HourlyForecast>()
+
+    init {
+        this.forecastList.addAll(forecastList)
+    }
 
     class HourlyForecastHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -34,6 +40,12 @@ class HourlyForecastAdapter(private val forecastList: List<HourlyForecast>) :
 
     override fun onBindViewHolder(holder: HourlyForecastHolder, position: Int) {
         holder.bind(forecastList[position])
+    }
+
+    fun updateList(newForecastList: List<HourlyForecast>) {
+        forecastList.clear()
+        forecastList.addAll(newForecastList)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = forecastList.size

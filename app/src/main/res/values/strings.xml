@@ -2,13 +2,15 @@
     <string name="app_name" translatable="false">Weather</string>
     <string name="Api_Key_Openweather" translatable="false">c208ce39b53a16d9df2fdb2e29a36d24</string>
 
-    <string name="Monday">%d Monday</string>
-    <string name="Tuesday">%d Tuesday</string>
-    <string name="Wednesday">%d Wednesday</string>
-    <string name="Thursday">%d Thursday</string>
-    <string name="Friday">%d Friday</string>
-    <string name="Saturday">%d Saturday</string>
-    <string name="Sunday">%d Sunday</string>
+    <string name="please_turn_on_geolocation">Please turn on geolocation.<br/>This is necessary for the correct display of the weather forecast.</string>
+
+    <string name="Monday">%s Monday</string>
+    <string name="Tuesday">%s Tuesday</string>
+    <string name="Wednesday">%s Wednesday</string>
+    <string name="Thursday">%s Thursday</string>
+    <string name="Friday">%s Friday</string>
+    <string name="Saturday">%s Saturday</string>
+    <string name="Sunday">%s Sunday</string>
 
     <string name="Morning">Morning</string>
     <string name="Day">Day</string>

@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/forecastFragment">
 
     <fragment
         android:id="@+id/forecastFragment"
         android:name="com.example.weatherapplication.ForecastFragment"
-        android:label="ForecastFragment" />
+        android:label="ForecastFragment">
+        <argument
+            android:name="message"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/errorFragment"
+        android:name="com.example.weatherapplication.ErrorFragment"
+        android:label="error_fragment"
+        tools:layout="@layout/error_fragment" >
+        <action
+            android:id="@+id/action_errorFragment_pop"
+            app:popUpTo="@id/errorFragment"
+            app:popUpToInclusive="true"
+            app:launchSingleTop="true" />
+    </fragment>
 </navigation>

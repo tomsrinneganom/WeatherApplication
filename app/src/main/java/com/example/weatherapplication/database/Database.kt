@@ -2,6 +2,7 @@ package com.example.weatherapplication.database
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
 import com.example.weatherapplication.mapper.CurrentForecastMapper
@@ -14,32 +15,49 @@ import io.ktor.client.statement.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.lang.Exception
 
 class Database() : IDatabase {
 
-    override suspend fun getCurrentForecast(lat:Double,lng:Double): CurrentForecast {
+    override suspend fun getCurrentForecast(lat: Double, lng: Double): CurrentForecast? {
         val jsonForecast = requestForecast(lat, lng)
-        return CurrentForecastMapper().map(jsonForecast)
-    }
 
-    override suspend fun getForecastForDaysOfTheWeek(lat:Double,lng:Double): List<ForecastForDaysOfTheWeek> {
-        val jsonForecast = requestForecast(lat, lng)
-        return ForecastForTheDaysOfTheWeekMapper().mapList(jsonForecast)
-    }
-
-    private suspend fun requestForecast(lat:Double,lng:Double): JSONObject {
-        var jsonObject: JSONObject
-        withContext(Dispatchers.IO) {
-            val client = HttpClient(CIO)
-            val result =
-                client.get<HttpResponse>("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lng&units=metric&appid=$apiKey")
-            val json: String = result.receive()
-            client.close()
-
-            jsonObject = JSONObject(json)
+        return if (jsonForecast != null) {
+            CurrentForecastMapper().map(jsonForecast)
+        } else {
+            null
         }
+    }
 
-        return jsonObject
+    override suspend fun getForecastForDaysOfTheWeek(
+        lat: Double,
+        lng: Double,
+    ): List<ForecastForDaysOfTheWeek> {
+        val jsonForecast = requestForecast(lat, lng)
+        return if (jsonForecast != null) {
+            ForecastForTheDaysOfTheWeekMapper().mapList(jsonForecast)
+        } else
+            emptyList()
+    }
+
+    private suspend fun requestForecast(lat: Double, lng: Double): JSONObject? {
+        var jsonObject: JSONObject
+        return try {
+            withContext(Dispatchers.IO) {
+                val client = HttpClient(CIO)
+                val result =
+                    client.get<HttpResponse>("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lng&units=metric&appid=$apiKey")
+
+                val json: String = result.receive()
+                client.close()
+
+                jsonObject = JSONObject(json)
+            }
+            jsonObject
+        } catch (e: Exception) {
+            Log.i("Log_tag","exception ${e.message}")
+            null
+        }
     }
 
     companion object {

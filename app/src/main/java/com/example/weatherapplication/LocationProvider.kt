@@ -1,55 +1,71 @@
 package com.example.weatherapplication
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.CancellationTokenSource
+import kotlinx.coroutines.flow.*
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class LocationProvider {
-    suspend fun getCurrentLocation(context: Context) = suspendCoroutine<Location?> {
-        val fusedLocationProvider = LocationServices.getFusedLocationProviderClient(context)
-        if (ActivityCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            it.resume(null)
-        } else {
-            fusedLocationProvider.lastLocation.addOnSuccessListener { location ->
-                it.resume(location)
-            }.addOnFailureListener { exception ->
-                Log.i("Log_tag", "exception")
-                it.resume(null)
+
+    private var cancellationTokenSource = CancellationTokenSource()
+    suspend fun getCurrentLocation(
+        context: Context,
+    ): Flow<Location?> {
+        val dataStoreManager = DataStoreManager(context.dataStore)
+        val flow = MutableStateFlow(dataStoreManager.getLastLocation())
+
+        if (PermissionManager().checkLocationPermission(context)) {
+
+            val locationProviderClient =
+                LocationServices.getFusedLocationProviderClient(context)
+
+            val currentLocationTask =
+                locationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,
+                    cancellationTokenSource.token)
+            currentLocationTask.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    flow.value = it.result
+                } else {
+                    Log.i("Log_tag", "exception ${it.exception}")
+                    flow.value = null
+                }
             }
+
+        } else
+            flow.value = dataStoreManager.getLastLocation()
+
+        return flow.map {
+            if(it != null){
+                dataStoreManager.insertLastLocation(it)
+            }
+            it ?: dataStoreManager.getLastLocation()
         }
+
     }
 
-    fun getLocalityName(context: Context, location: Location): String {
+    private fun getLocality(context: Context, location: Location): String {
         val address =
             Geocoder(context).getFromLocation(location.latitude, location.longitude, 1)
-        Log.i("Log_tag", "address size:${address.size}")
         var locality = ""
         address.forEach {
-            Log.i("Log_tag", "it.featureName ${it.locality}")
             locality = it.locality
         }
         return locality
     }
 
-    suspend fun getLocalityName(context: Context): String {
-        val location = getCurrentLocation(context)
-        return if (location != null) {
-            getLocalityName(context, location)
-        } else {
-            ""
+    suspend fun getLocality(context: Context): Flow<String> {
+        return flow {
+            getCurrentLocation(context).collect { location ->
+                if (location != null) {
+                    emit(getLocality(context, location))
+                }
+            }
         }
     }
+
 }

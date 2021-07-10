@@ -15,8 +15,10 @@ import com.example.weatherapplication.enums.EnumPartOfDay
 class ForecastByPartsOfTheDayAdapter(forecastList: List<ForecastByPartsOfTheDay>) :
     RecyclerView.Adapter<ForecastByPartsOfTheDayHolder>() {
 
-    private val forecastList: List<ForecastByPartsOfTheDay> = forecastList.sortedBy {
-        EnumPartOfDay.valueOf(it.partOfTheDay).index
+    private val forecastList: MutableList<ForecastByPartsOfTheDay> = mutableListOf()
+
+    init {
+        this.forecastList.addAndSort(forecastList)
     }
 
     class ForecastByPartsOfTheDayHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,4 +46,17 @@ class ForecastByPartsOfTheDayAdapter(forecastList: List<ForecastByPartsOfTheDay>
     }
 
     override fun getItemCount() = forecastList.size
+
+    fun updateList(newForecastList: List<ForecastByPartsOfTheDay>) {
+        forecastList.clear()
+        forecastList.addAndSort(newForecastList)
+        notifyDataSetChanged()
+    }
+
+}
+
+fun MutableList<ForecastByPartsOfTheDay>.addAndSort(list: List<ForecastByPartsOfTheDay>) {
+    this.addAll(list.sortedBy {
+        EnumPartOfDay.valueOf(it.partOfTheDay).index
+    })
 }

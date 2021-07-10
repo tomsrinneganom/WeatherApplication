@@ -13,8 +13,9 @@ class ForecastForTheDay(
 ) : AbstractForecastWithWeatherIcon(temperature, date, weatherIcon) {
 
     fun getDate(resources: Resources): String {
+        val dateTime = getDateTime()
         return resources.getString(
-            when (getDateTime().dayOfWeek.value) {
+            when (dateTime.dayOfWeek.value) {
                 1 -> R.string.Monday
                 2 -> R.string.Tuesday
                 3 -> R.string.Wednesday
@@ -22,7 +23,7 @@ class ForecastForTheDay(
                 5 -> R.string.Friday
                 6 -> R.string.Saturday
                 else -> R.string.Sunday
-            }, getDateTime().dayOfMonth)
+            }, timeToString(dateTime.dayOfMonth))
     }
 
     companion object{

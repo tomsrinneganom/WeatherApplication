@@ -1,6 +1,7 @@
 package com.example.weatherapplication
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.data.CurrentForecast
@@ -24,33 +25,46 @@ class ForecastViewModel @Inject constructor(private val repository: Repository) 
 
     fun getForecast(context: Context) {
         viewModelScope.launch {
-            val location = LocationProvider().getCurrentLocation(context)
-            if (location != null) {
-                launch {
-                    repository.getCurrentForecast(location.latitude, location.longitude, context)
-                        .collect {
-                            _currentForecastState.value = it
-                        }
-                }
-                launch {
-                    repository.getForecastForTheDay(location.latitude, location.longitude, context)
-                        .collect {
-                            _forecastForTheDaysOfTheWeek.value = it
-                        }
-                }
+            val locationFlow = LocationProvider().getCurrentLocation(context)
+
+            launch {
+                repository.getCurrentForecast(locationFlow, context)
+                    .collect {
+                        Log.i("Log_tag", "getCurrentForecast")
+                        _currentForecastState.value = it
+                    }
+            }
+
+            launch {
+                repository.getForecastForTheDay(locationFlow, context)
+                    .collect {
+                        Log.i("Log_tag", "getForecastForTheDay")
+                        _forecastForTheDaysOfTheWeek.value = it
+                    }
             }
         }
     }
 
-     fun getLocality(context: Context): StateFlow<String> {
-         viewModelScope.launch {
-             var locality = LocationProvider().getLocalityName(context)
-             if (locality.isBlank()) {
-                 locality = DataStoreManager(context.dataStore).getLastLocality()
-             }
-             _localityState.value = locality
-         }
-         return localityState
-     }
 
+    fun getLocality(context: Context): StateFlow<String> {
+        viewModelScope.launch {
+            LocationProvider().getLocality(context).collect {
+                _localityState.value = it
+            }
+        }
+        return localityState
+    }
+
+    fun getForecastFromLocalDatabase(context: Context) {
+        viewModelScope.launch {
+            launch {
+                _currentForecastState.value =
+                    repository.getCurrentForecastFromLocalDatabase(context)
+            }
+            launch {
+                _forecastForTheDaysOfTheWeek.value =
+                    repository.getForecastForTheDayFromLocalDatabase(context)
+            }
+        }
+    }
 }

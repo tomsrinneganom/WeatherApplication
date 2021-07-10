@@ -1,6 +1,8 @@
 package com.example.weatherapplication
 
 import android.content.Context
+import android.location.Location
+import android.util.Log
 import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
 import com.example.weatherapplication.database.Database
@@ -10,8 +12,7 @@ import com.example.weatherapplication.database.localdatabase.RoomDatabaseProvide
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -20,29 +21,51 @@ class Repository @Inject constructor(
 ) {
 
     suspend fun getCurrentForecast(
-        lat: Double,
-        lng: Double,
+        locationFlow: Flow<Location?>,
         context: Context,
     ): Flow<CurrentForecast> {
         return flow {
+            Log.i("Log_tag", " getCurrentForecast")
             emit(localDatabaseProvider.getCurrentForecast(context))
-            val resultFromDatabase = database.getCurrentForecast(lat, lng)
-            emit(resultFromDatabase)
-            localDatabaseProvider.insertCurrentForecast(context, resultFromDatabase)
+            locationFlow.collect { location ->
+                if (location != null) {
+                    val resultFromDatabase =
+                        database.getCurrentForecast(location.latitude, location.longitude)
+                    if (resultFromDatabase != null) {
+                        emit(resultFromDatabase)
+                        localDatabaseProvider.insertCurrentForecast(context, resultFromDatabase)
+                    }
+                }
+            }
         }
     }
 
     suspend fun getForecastForTheDay(
-        lat: Double,
-        lng: Double,
+        locationFlow: Flow<Location?>,
         context: Context,
     ): Flow<List<ForecastForDaysOfTheWeek>> {
+
         return flow {
             emit(localDatabaseProvider.getForecastForDaysOfTheWeek(context))
-            val resultFromDatabase = database.getForecastForDaysOfTheWeek(lat, lng)
-            emit(resultFromDatabase)
-            localDatabaseProvider.insertForecastForDaysOfTheWeek(context, resultFromDatabase)
+            locationFlow.collect { location ->
+                if (location != null) {
+                    val resultFromDatabase =
+                        database.getForecastForDaysOfTheWeek(location.latitude, location.longitude)
+                    if (resultFromDatabase.isNotEmpty()) {
+                        emit(resultFromDatabase)
+                        localDatabaseProvider.insertForecastForDaysOfTheWeek(context,
+                            resultFromDatabase)
+                    }
+                }
+            }
         }
+    }
+
+    suspend fun getForecastForTheDayFromLocalDatabase(context: Context): List<ForecastForDaysOfTheWeek> {
+        return localDatabaseProvider.getForecastForDaysOfTheWeek(context)
+    }
+    suspend fun getCurrentForecastFromLocalDatabase(context: Context):CurrentForecast{
+        return localDatabaseProvider.getCurrentForecast(context)
     }
 
 }

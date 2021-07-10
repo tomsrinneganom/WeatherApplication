@@ -10,10 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
+import com.example.weatherapplication.data.HourlyForecast
 
 
-class ListByDayAdapter(private val forecastList: List<ForecastForDaysOfTheWeek>) :
+class ListByDayAdapter(forecastList: List<ForecastForDaysOfTheWeek> = emptyList()) :
     RecyclerView.Adapter<ListByDayAdapter.MyViewHolder>() {
+
+    private val forecastList = mutableListOf<ForecastForDaysOfTheWeek>()
+    init {
+        this.forecastList.addAll(forecastList)
+    }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -48,6 +54,12 @@ class ListByDayAdapter(private val forecastList: List<ForecastForDaysOfTheWeek>)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         Log.i("Log_Tag", "list size")
         holder.bind(forecastList[position])
+    }
+
+    fun updateList(newForecastList: List<ForecastForDaysOfTheWeek>) {
+        forecastList.clear()
+        forecastList.addAll(newForecastList)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount() = forecastList.size

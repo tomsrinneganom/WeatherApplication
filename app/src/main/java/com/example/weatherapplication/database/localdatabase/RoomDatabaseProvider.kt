@@ -1,39 +1,30 @@
 package com.example.weatherapplication.database.localdatabase
 
 import android.content.Context
-import androidx.room.Room
 import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
-import dagger.hilt.EntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RoomDatabaseProvider @Inject constructor(roomDatabase: AppDatabase) : ILocalDatabaseProvider {
+class RoomDatabaseProvider @Inject constructor(private val roomDatabase: AppDatabase) : ILocalDatabaseProvider {
 
     private val ioCoroutineContext = Dispatchers.IO
 
-    private fun getRoomDataBase(context: Context): AppDatabase {
-        return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-            .build()
-
-    }
-
-    private fun getForecastDao(context: Context): ForecastDao {
-        return getRoomDataBase(context).forecastDao()
+    private fun getForecastDao(): ForecastDao {
+        return roomDatabase.forecastDao()
     }
 
     override suspend fun getCurrentForecast(context: Context): CurrentForecast {
         return withContext(ioCoroutineContext) {
-            val dao = getForecastDao(context)
-
+            val dao = getForecastDao()
             return@withContext dao.getCurrentForecast()
         }
     }
 
     override suspend fun getForecastForDaysOfTheWeek(context: Context): List<ForecastForDaysOfTheWeek> {
         return withContext(ioCoroutineContext) {
-            val dao = getForecastDao(context)
+            val dao = getForecastDao()
             val forecast = dao.getForecastForDaysOfTheWeek().toMutableList()
             forecast.removeIf {
                 it.forecastByPartsOfTheDay.isEmpty()
@@ -47,7 +38,7 @@ class RoomDatabaseProvider @Inject constructor(roomDatabase: AppDatabase) : ILoc
 
     override suspend fun insertCurrentForecast(context: Context, currentForecast: CurrentForecast) {
         withContext(ioCoroutineContext) {
-            val dao = getForecastDao(context)
+            val dao = getForecastDao()
 
             dao.deleteHourlyForecast()
             dao.insertHourlyForecast(currentForecast.hourlyForecast)
@@ -60,7 +51,7 @@ class RoomDatabaseProvider @Inject constructor(roomDatabase: AppDatabase) : ILoc
         forecast: List<ForecastForDaysOfTheWeek>,
     ) {
         withContext(ioCoroutineContext) {
-            val dao = getForecastDao(context)
+            val dao = getForecastDao()
             if (forecast.isNotEmpty()) {
                 dao.deleteForecastForDaysOfTheWeek()
                 dao.deleteForecastByPartsOfTheDay()
