@@ -13,8 +13,8 @@ abstract class AbstractForecastMapper {
         val jsonWeather = jsonObject.getJSONArray("weather").getJSONObject(0)
         val weatherId = jsonWeather.getInt("id")
         val partOfTheDay = jsonWeather.getString("icon")[2]
-        return weatherMapper(weatherId, partOfTheDay)
 
+        return weatherMapper(weatherId, partOfTheDay)
     }
 
     private fun weatherMapper(weatherId: Int, partOfTheDay: Char): Int {

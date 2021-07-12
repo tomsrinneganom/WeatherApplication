@@ -3,6 +3,7 @@ package com.example.weatherapplication.database
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
+import com.example.weatherapplication.BuildConfig
 import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
 import com.example.weatherapplication.mapper.CurrentForecastMapper
@@ -46,7 +47,7 @@ class Database() : IDatabase {
             withContext(Dispatchers.IO) {
                 val client = HttpClient(CIO)
                 val result =
-                    client.get<HttpResponse>("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lng&units=metric&appid=$apiKey")
+                    client.get<HttpResponse>("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lng&units=metric&appid=${BuildConfig.openWeatherApiKey}")
 
                 val json: String = result.receive()
                 client.close()
@@ -58,9 +59,5 @@ class Database() : IDatabase {
             Log.i("Log_tag","exception ${e.message}")
             null
         }
-    }
-
-    companion object {
-        private const val apiKey = "c208ce39b53a16d9df2fdb2e29a36d24"
     }
 }
