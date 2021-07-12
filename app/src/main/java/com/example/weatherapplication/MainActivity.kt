@@ -2,11 +2,8 @@ package com.example.weatherapplication
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
@@ -15,18 +12,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.*
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.NavDirections
-import androidx.navigation.NavHost
-import androidx.navigation.findNavController
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.lang.Exception
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        checkPermission()
+        checkAccessToLocation()
 
     }
 
@@ -61,8 +49,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    private fun checkPermission() {
-
+    private fun checkAccessToLocation() {
         lifecycleScope.launch {
 
             val locationPermission = PermissionManager().checkLocationPermission(baseContext)

@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Weather</string>
     <string name="Api_Key_Openweather" translatable="false">c208ce39b53a16d9df2fdb2e29a36d24</string>
 
-    <string name="please_turn_on_geolocation">Please turn on geolocation.<br/>This is necessary for the correct display of the weather forecast.</string>
+    <string name="please_turn_on_geolocation">Please turn on geolocation. This is necessary for the correct display of the weather forecast.</string>
 
     <string name="Monday">%s Monday</string>
     <string name="Tuesday">%s Tuesday</string>

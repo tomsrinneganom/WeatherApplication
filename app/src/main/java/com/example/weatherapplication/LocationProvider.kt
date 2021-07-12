@@ -13,6 +13,7 @@ import kotlin.coroutines.suspendCoroutine
 class LocationProvider {
 
     private var cancellationTokenSource = CancellationTokenSource()
+
     suspend fun getCurrentLocation(
         context: Context,
     ): Flow<Location?> {
@@ -27,6 +28,7 @@ class LocationProvider {
             val currentLocationTask =
                 locationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,
                     cancellationTokenSource.token)
+
             currentLocationTask.addOnCompleteListener {
                 if (it.isSuccessful) {
                     flow.value = it.result
@@ -48,7 +50,7 @@ class LocationProvider {
 
     }
 
-    private fun getLocality(context: Context, location: Location): String {
+    fun getLocality(context: Context, location: Location): String {
         val address =
             Geocoder(context).getFromLocation(location.latitude, location.longitude, 1)
         var locality = ""

@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.map
 
 class DataStoreManager(private val dataStore: DataStore<Preferences>) {
     private val themePreferencesKey = intPreferencesKey("theme_style")
-    private val localityPreferencesKey = stringPreferencesKey("current_locality")
     private val latitudePreferencesKey = doublePreferencesKey("last_location_latitude")
     private val longitudePreferencesKey = doublePreferencesKey("last_longitude_latitude")
 

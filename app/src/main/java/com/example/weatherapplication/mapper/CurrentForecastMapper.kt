@@ -11,8 +11,6 @@ class CurrentForecastMapper : AbstractForecastMapper() {
     fun map(jsonObject: JSONObject): CurrentForecast {
         val jsonCurrentWeather = jsonObject.getJSONObject("current")
 
-        val timeInSecond = jsonCurrentWeather.getLong("dt")
-
         val forecastForTheDay = ForecastForTheDay(ForecastForTheDay.DATE_CURRENT_FORECAST,temperatureMapper(jsonCurrentWeather.getDouble("temp")),getWeatherIcon(jsonCurrentWeather))
 
         val hourlyForecast = HourlyForecastMapper().map(jsonObject,ForecastForTheDay.DATE_CURRENT_FORECAST)

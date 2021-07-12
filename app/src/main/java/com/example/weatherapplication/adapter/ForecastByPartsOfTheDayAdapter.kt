@@ -12,7 +12,7 @@ import com.example.weatherapplication.adapter.ForecastByPartsOfTheDayAdapter.For
 import com.example.weatherapplication.data.ForecastByPartsOfTheDay
 import com.example.weatherapplication.enums.EnumPartOfDay
 
-class ForecastByPartsOfTheDayAdapter(forecastList: List<ForecastByPartsOfTheDay>) :
+class ForecastByPartsOfTheDayAdapter(forecastList: List<ForecastByPartsOfTheDay> = emptyList()) :
     RecyclerView.Adapter<ForecastByPartsOfTheDayHolder>() {
 
     private val forecastList: MutableList<ForecastByPartsOfTheDay> = mutableListOf()

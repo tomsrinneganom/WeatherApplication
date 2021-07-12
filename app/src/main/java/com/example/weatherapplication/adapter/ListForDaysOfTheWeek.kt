@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
-import com.example.weatherapplication.data.HourlyForecast
 
 
-class ListByDayAdapter(forecastList: List<ForecastForDaysOfTheWeek> = emptyList()) :
-    RecyclerView.Adapter<ListByDayAdapter.MyViewHolder>() {
+class ListForDaysOfTheWeek(forecastList: List<ForecastForDaysOfTheWeek> = emptyList()) :
+    RecyclerView.Adapter<ListForDaysOfTheWeek.MyViewHolder>() {
 
     private val forecastList = mutableListOf<ForecastForDaysOfTheWeek>()
+
     init {
         this.forecastList.addAll(forecastList)
     }

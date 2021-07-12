@@ -25,6 +25,7 @@ class RoomDatabaseProvider @Inject constructor(private val roomDatabase: AppData
     override suspend fun getForecastForDaysOfTheWeek(context: Context): List<ForecastForDaysOfTheWeek> {
         return withContext(ioCoroutineContext) {
             val dao = getForecastDao()
+
             val forecast = dao.getForecastForDaysOfTheWeek().toMutableList()
             forecast.removeIf {
                 it.forecastByPartsOfTheDay.isEmpty()
@@ -32,6 +33,7 @@ class RoomDatabaseProvider @Inject constructor(private val roomDatabase: AppData
             forecast.sortBy {
                 it.forecastForTheDay.date
             }
+
             return@withContext forecast
         }
     }

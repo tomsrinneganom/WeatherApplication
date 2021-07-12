@@ -55,16 +55,4 @@ class ForecastViewModel @Inject constructor(private val repository: Repository) 
         return localityState
     }
 
-    fun getForecastFromLocalDatabase(context: Context) {
-        viewModelScope.launch {
-            launch {
-                _currentForecastState.value =
-                    repository.getCurrentForecastFromLocalDatabase(context)
-            }
-            launch {
-                _forecastForTheDaysOfTheWeek.value =
-                    repository.getForecastForTheDayFromLocalDatabase(context)
-            }
-        }
-    }
 }

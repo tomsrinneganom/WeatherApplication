@@ -12,12 +12,6 @@ abstract class AbstractForecastWithWeatherIcon(temperature: Int, date: Long, val
     }
 
     fun timeToString(time: Int): String {
-//        val dateTime = getDateTime()
-//        val hour = dateTime.hour
-//        val minute = dateTime.minute
-//
-//        var result = ""
-
         return if (time < 10) "0$time" else "$time"
     }
 }

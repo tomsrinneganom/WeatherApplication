@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="please_turn_on_geolocation">Пожалуйста, включите геолокацию. <br/>Это нужно для корректоного отображения прогноза погоды.</string>
+    <string name="please_turn_on_geolocation">Пожалуйста, включите геолокацию. Это нужно для корректоного отображения прогноза погоды.</string>
 
     <string name="Monday">Пн. %s</string>
-    <string name="Tuesday">Вт.%s</string>
+    <string name="Tuesday">Вт. %s</string>
     <string name="Wednesday">Ср. %s</string>
     <string name="Thursday">Чт. %s</string>
     <string name="Friday">Пт. %s</string>

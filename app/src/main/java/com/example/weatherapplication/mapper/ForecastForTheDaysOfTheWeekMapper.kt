@@ -28,7 +28,6 @@ class ForecastForTheDaysOfTheWeekMapper : AbstractForecastMapper() {
                 )
             )
         }
-
         return resultList
     }
 }

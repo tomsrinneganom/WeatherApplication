@@ -13,7 +13,6 @@ class HourlyForecast(
 
     fun getHourAndMinute(): String {
         val dateTime = getDateTime()
-
         return "${timeToString(dateTime.hour)}:${timeToString(dateTime.minute)}"
     }
 

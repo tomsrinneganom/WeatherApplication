@@ -28,11 +28,7 @@ class HiltApplication : Application() {
                 AppDatabase::class.java,
                 RoomDatabaseProvider.DATABASE_NAME).build()
         }
-    }
 
-    @Module
-    @InstallIn(SingletonComponent::class)
-    object RoomDatabaseProviderModule {
         @Provides
         fun provideRoomDatabaseProvider(database: AppDatabase): ILocalDatabaseProvider {
             return RoomDatabaseProvider(database)
