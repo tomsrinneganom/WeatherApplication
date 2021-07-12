@@ -57,8 +57,6 @@ class ForecastFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             adapter = hourlyForecastAdapter
         }
-
-        checkAccessToLocation()
         return view
     }
 
@@ -108,8 +106,5 @@ class ForecastFragment : Fragment() {
 
     }
 
-    private fun checkAccessToLocation() {
-
-    }
 }
 

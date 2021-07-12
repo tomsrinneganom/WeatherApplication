@@ -6,6 +6,7 @@ import com.example.weatherapplication.data.HourlyForecast
 import org.json.JSONObject
 import java.time.Instant
 import java.time.ZoneId
+import kotlin.random.Random
 
 class CurrentForecastMapper : AbstractForecastMapper() {
     fun map(jsonObject: JSONObject): CurrentForecast {

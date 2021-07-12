@@ -4,11 +4,10 @@ import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import com.example.weatherapplication.database.DataStoreManager
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.flow.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class LocationProvider {
 

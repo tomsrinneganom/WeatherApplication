@@ -2,10 +2,8 @@ package com.example.weatherapplication
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
 import com.example.weatherapplication.data.CurrentForecast
-import kotlinx.coroutines.flow.first
+import com.example.weatherapplication.database.DataStoreManager
 
 class ThemeProvider(dataStore: DataStore<Preferences>) {
     private val dataStoreManager = DataStoreManager(dataStore)

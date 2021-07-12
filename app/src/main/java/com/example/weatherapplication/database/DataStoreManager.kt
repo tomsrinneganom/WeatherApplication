@@ -1,10 +1,9 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.database
 
 import android.location.Location
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 
 class DataStoreManager(private val dataStore: DataStore<Preferences>) {
     private val themePreferencesKey = intPreferencesKey("theme_style")

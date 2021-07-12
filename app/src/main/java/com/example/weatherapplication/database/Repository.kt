@@ -1,17 +1,11 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.database
 
 import android.content.Context
 import android.location.Location
 import android.util.Log
 import com.example.weatherapplication.data.CurrentForecast
 import com.example.weatherapplication.data.ForecastForDaysOfTheWeek
-import com.example.weatherapplication.database.Database
-import com.example.weatherapplication.database.IDatabase
 import com.example.weatherapplication.database.localdatabase.ILocalDatabaseProvider
-import com.example.weatherapplication.database.localdatabase.RoomDatabaseProvider
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 

@@ -2,10 +2,10 @@ package com.example.weatherapplication
 
 import android.app.Application
 import android.content.Context
-import android.location.Location
 import androidx.room.Room
 import com.example.weatherapplication.database.Database
 import com.example.weatherapplication.database.IDatabase
+import com.example.weatherapplication.database.Repository
 import com.example.weatherapplication.database.localdatabase.AppDatabase
 import com.example.weatherapplication.database.localdatabase.ILocalDatabaseProvider
 import com.example.weatherapplication.database.localdatabase.RoomDatabaseProvider
