@@ -1,4 +1,5 @@
-# WeatherApplication!
+# WeatherApplication
+
  Weather forecast app that changes the theme of the app in different weather conditions
   <div align="center">
   <img src="https://user-images.githubusercontent.com/44583642/125308681-c86a9000-e339-11eb-9f88-b633405e6988.jpg" width="200" />
