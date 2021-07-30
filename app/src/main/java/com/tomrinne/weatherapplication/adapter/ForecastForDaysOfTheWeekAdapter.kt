@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tomrinne.weatherapplication.R
 import com.tomrinne.weatherapplication.data.ForecastForDaysOfTheWeek
 
 
-class ListForDaysOfTheWeek(forecastList: List<ForecastForDaysOfTheWeek> = emptyList()) :
-    RecyclerView.Adapter<ListForDaysOfTheWeek.MyViewHolder>() {
+class ForecastForDaysOfTheWeekAdapter(forecastList: List<ForecastForDaysOfTheWeek> = emptyList()) :
+    RecyclerView.Adapter<ForecastForDaysOfTheWeekAdapter.MyViewHolder>() {
 
     private val forecastList = mutableListOf<ForecastForDaysOfTheWeek>()
 
@@ -38,9 +39,22 @@ class ListForDaysOfTheWeek(forecastList: List<ForecastForDaysOfTheWeek> = emptyL
             val recyclerView = itemView.findViewById<RecyclerView>(R.id.recyclerView)
 
             val adapter = ForecastByPartsOfTheDayAdapter(forecast.forecastByPartsOfTheDay)
+            val detailedForecastAdapter =
+                DetailedForecastForDaysOfTheWeekAdapter(forecast.forecastForTheDay.detailForecastList)
 
             recyclerView.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
+
+            itemView.setOnClickListener {
+                if (recyclerView.adapter == adapter) {
+                    recyclerView.layoutManager = GridLayoutManager(itemView.context, 2)
+                    recyclerView.adapter = detailedForecastAdapter
+                } else {
+                    recyclerView.layoutManager =
+                        LinearLayoutManager(itemView.context, LinearLayoutManager.VERTICAL, false)
+                    recyclerView.adapter = adapter
+                }
+            }
 
             recyclerView.adapter = adapter
         }

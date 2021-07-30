@@ -9,11 +9,16 @@
     <color name="white">#FFFFFFFF</color>
 
     <color  name="blue_primary_color">#9BC4CB</color>
+    <color  name="blue_alpha">#339BC4CB</color>
+
     <color  name="blue_secondary_color">#E9F2F4</color>
 
     <color  name="yellow_primary_color">#fef25d</color>
+    <color  name="yellow_alpha">#1AFEF25D</color>
     <color  name="yellow_secondary_color">#FFFBC5</color>
 
     <color name="night_primary_color">#1B2021</color>
     <color name="night_secondary_color">#2A3233</color>
+    <color  name="night_alpha">#331B2021</color>
+
 </resources>

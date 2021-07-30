@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginBottom="16dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:showIn="@layout/weather_list_by_day">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="4dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/detailIconImageView"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            app:tint="?attr/colorTextPrimary"
+            tools:srcCompat="@drawable/ic_wind" />
+
+        <TextView
+            android:id="@+id/detailValueTextView"
+            style="@style/Widget.App.TextView.SmallText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            tools:text="72%" />
+    </LinearLayout>
+</LinearLayout>

@@ -16,9 +16,9 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -37,7 +37,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="2dp"
             android:visibility="visible"
-            tools:srcCompat="@drawable/ic__cloudy" />
+            tools:srcCompat="@drawable/ic_cloudy" />
     </LinearLayout>
 
     <TextView
@@ -45,9 +45,9 @@
         style="@style/Widget.App.TextView.SmallText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Night" />
 

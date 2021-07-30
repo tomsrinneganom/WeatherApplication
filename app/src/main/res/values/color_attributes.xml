@@ -3,4 +3,7 @@
     <attr name="colorTextPrimary" format="color"/>
     <attr name="colorBackgroundPrimary" format="color"/>
     <attr name="colorBackgroundSecondary" format="color"/>
+    <attr name="colorPrimaryAlpha" format="color"/>
+    <attr name="colorSwipeRefreshPrimary" format="color"/>
+    <attr name="colorSwipeRefreshSecondary" format="color"/>
 </resources>

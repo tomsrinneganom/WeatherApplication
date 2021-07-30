@@ -43,7 +43,7 @@ abstract class AbstractForecastMapper {
                 if (partOfTheDay == 'n')
                     R.drawable.ic_night
                 else
-                    R.drawable.ic__cloudy
+                    R.drawable.ic_cloudy
             }
             else -> R.drawable.ic_cloudy_1
         }

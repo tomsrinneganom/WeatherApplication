@@ -8,5 +8,5 @@ data class CurrentForecast(
     @Relation(
         parentColumn = "date",
         entityColumn = "parentDate"
-    ) val hourlyForecast: List<HourlyForecast>
+    ) val hourlyForecast: List<HourlyForecast>,
 )

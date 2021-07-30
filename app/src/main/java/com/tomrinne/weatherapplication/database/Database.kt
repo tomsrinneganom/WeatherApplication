@@ -46,7 +46,6 @@ class Database() : IDatabase {
                 val client = HttpClient(CIO)
                 val result =
                     client.get<HttpResponse>("https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lng&units=metric&appid=${BuildConfig.openWeatherApiKey}")
-
                 val json: String = result.receive()
                 client.close()
 

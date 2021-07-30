@@ -15,4 +15,16 @@
     <string name="Day">День</string>
     <string name="Evening">Вечер</string>
     <string name="Night">Ночь</string>
+    <string name="sunrise">Восход</string>
+    <string name="sunset">Закат</string>
+    <string name="feels_like_temperature">Ощущается как</string>
+    <string name="pressure">Давление</string>
+    <string name="humidity">Влажность</string>
+    <string name="clouds">Облачность</string>
+    <string name="visibility">Видимость</string>
+    <string name="wind_speed">Скорость ветра</string>
+    <string name="probability_of_precipitation">"Вероятность осадков "</string>
+    <string name="kilometers_per_hour">км/ч</string>
+    <string name="kilometer">км</string>
+    <string name="bar">бар</string>
 </resources>

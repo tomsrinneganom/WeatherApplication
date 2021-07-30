@@ -20,4 +20,8 @@
         <item name="cardBackgroundColor">?attr/colorBackgroundSecondary</item>
     </style>
 
+    <style name="Widget.App.TextView.BigText"  parent="Widget.App.TextView">
+        <item name="android:textSize">42sp</item>
+    </style>
+
 </resources>

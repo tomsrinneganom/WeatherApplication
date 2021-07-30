@@ -4,6 +4,7 @@ import com.tomrinne.weatherapplication.data.ForecastByPartsOfTheDay
 import com.tomrinne.weatherapplication.enums.EnumPartOfDay
 import org.json.JSONObject
 
+
 class ForecastByPartsOfTheDayMapper : AbstractForecastMapper() {
 
     fun map(jsonTemperature: JSONObject, parentDate: Long): List<ForecastByPartsOfTheDay> {

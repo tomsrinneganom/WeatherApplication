@@ -20,14 +20,12 @@ class HourlyForecastMapper : AbstractForecastMapper() {
             val jsonItem = jsonHourlyForecast.getJSONObject(i)
             val timeInSecond = jsonItem.getLong("dt")
 
-            resultForecast.add(
-                HourlyForecast(
-                    timeInSecond,
-                    temperatureMapper(jsonItem.getDouble("temp")),
-                    getWeatherIcon(jsonItem),
-                    parentDate
-                )
-            )
+            resultForecast.add(HourlyForecast(
+                timeInSecond,
+                temperatureMapper(jsonItem.getDouble("temp")),
+                getWeatherIcon(jsonItem),
+                parentDate
+            ))
 
             if (i >= MIN_NUMBER_OF_HOURLY_FORECAST) {
                 break

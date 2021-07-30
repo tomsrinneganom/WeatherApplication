@@ -41,13 +41,14 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             tools:itemCount="4"
-            tools:listitem="@layout/weather_list_by_time" />
+            tools:listitem="@layout/mini_detailed_forecast_item" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -74,6 +75,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="4dp"
                 tools:srcCompat="@drawable/ic_rain_1" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

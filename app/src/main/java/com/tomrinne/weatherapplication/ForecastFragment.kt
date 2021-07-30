@@ -7,14 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.color.MaterialColors
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.tomrinne.weatherapplication.adapter.DetailedForecastAdapter
+import com.tomrinne.weatherapplication.adapter.ForecastForDaysOfTheWeekAdapter
 import com.tomrinne.weatherapplication.adapter.HourlyForecastAdapter
-import com.tomrinne.weatherapplication.adapter.ListForDaysOfTheWeek
 import com.tomrinne.weatherapplication.data.CurrentForecast
 import com.tomrinne.weatherapplication.data.ForecastForDaysOfTheWeek
+import com.tomrinne.weatherapplication.data.detailedforecast.DetailForecast
 import com.tomrinne.weatherapplication.extensions.collect
 import com.tomrinne.weatherapplication.extensions.recreateSmoothly
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,9 +36,11 @@ class ForecastFragment : Fragment() {
     private var forecastForTheDayRecyclerView: RecyclerView? = null
     private var currentTemperatureTextView: TextView? = null
     private var hourlyForecastAdapter: HourlyForecastAdapter? = null
-    private var forecastForTheDayAdapter: ListForDaysOfTheWeek? = null
+    private var forecastForTheDayAdapterAdapter: ForecastForDaysOfTheWeekAdapter? = null
+    private var detailedForecastAdapter: DetailedForecastAdapter? = null
     private var currentWeatherImageView: ImageView? = null
     private var localityTextView: TextView? = null
+    private var cardView: CardView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,10 +53,15 @@ class ForecastFragment : Fragment() {
         hourlyForecastRecyclerView = view.findViewById(R.id.listByDateRecyclerView)
         forecastForTheDayRecyclerView = view.findViewById(R.id.listByDayRecyclerView)
         localityTextView = view.findViewById(R.id.localityTextView)
+        cardView = view.findViewById(R.id.cardView)
 
-        forecastForTheDayAdapter = ListForDaysOfTheWeek()
+        initSwipeRefresh(view)
+
+        forecastForTheDayAdapterAdapter = ForecastForDaysOfTheWeekAdapter()
+        detailedForecastAdapter = DetailedForecastAdapter()
+
         forecastForTheDayRecyclerView?.apply {
-            adapter = forecastForTheDayAdapter
+            adapter = forecastForTheDayAdapterAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
@@ -71,11 +86,45 @@ class ForecastFragment : Fragment() {
 
     }
 
+    private fun initSwipeRefresh(view: View) {
+        val swipeRefreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+        swipeRefreshLayout.setColorSchemeColors(MaterialColors.getColor(view,
+            R.attr.colorTextPrimary))
+
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(MaterialColors.getColor(view,
+            R.attr.colorBackgroundSecondary))
+
+        swipeRefreshLayout.setOnRefreshListener {
+
+        }
+    }
+
     private fun updateForecastForTheDay(forecastForTheDay: List<ForecastForDaysOfTheWeek>) {
-        forecastForTheDayAdapter?.updateList(forecastForTheDay)
+        Log.i("Log_tag", "hourlyForecastRecyclerView?.setOnClickListener")
+        forecastForTheDayAdapterAdapter?.updateList(forecastForTheDay)
+
     }
 
     private fun updateCurrentWeather(forecast: CurrentForecast) {
+        test(forecast)
+        detailedForecastAdapter?.update(forecast.forecastForTheDay.detailForecastList)
+        hourlyForecastAdapter?.updateList(forecast.hourlyForecast)
+
+
+        cardView?.let {
+            it.isClickable = true
+            it.setOnClickListener {
+                if (hourlyForecastRecyclerView?.adapter == hourlyForecastAdapter) {
+                    hourlyForecastRecyclerView?.layoutManager =
+                        GridLayoutManager(requireContext(), 2)
+                    hourlyForecastRecyclerView?.adapter = detailedForecastAdapter
+                } else {
+                    hourlyForecastRecyclerView?.layoutManager =
+                        LinearLayoutManager(requireContext())
+                    hourlyForecastRecyclerView?.adapter = hourlyForecastAdapter
+                }
+            }
+        }
         currentTemperatureTextView?.text = forecast.forecastForTheDay.getTemperature(resources)
 
         currentWeatherImageView?.setImageDrawable(forecast.forecastForTheDay.getDrawableWeatherIcon(
@@ -85,6 +134,7 @@ class ForecastFragment : Fragment() {
     }
 
     private fun getForecast() {
+
         viewModel.getForecast(requireContext())
 
         viewModel.currentForecastState.onEach {
@@ -106,5 +156,11 @@ class ForecastFragment : Fragment() {
 
     }
 
+    private fun test(currentForecast: CurrentForecast) {
+        val list = currentForecast.forecastForTheDay.detailForecastList
+       val typeToken = object :TypeToken<List<DetailForecast>>() {}.type
+        val gson = Gson().toJsonTree(list, typeToken)
+        Log.i("Log_tag", "$gson")
+    }
 }
 
