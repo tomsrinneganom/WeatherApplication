@@ -19,7 +19,6 @@ class Repository @Inject constructor(
         context: Context,
     ): Flow<CurrentForecast> {
         return flow {
-            Log.i("Log_tag", " getCurrentForecast")
             emit(localDatabaseProvider.getCurrentForecast(context))
             locationFlow.collect { location ->
                 if (location != null) {
@@ -32,6 +31,7 @@ class Repository @Inject constructor(
                 }
             }
         }
+
     }
 
     suspend fun getForecastForTheDay(
@@ -53,6 +53,7 @@ class Repository @Inject constructor(
                 }
             }
         }
+
     }
 
     suspend fun getForecastForTheDayFromLocalDatabase(context: Context): List<ForecastForDaysOfTheWeek> {

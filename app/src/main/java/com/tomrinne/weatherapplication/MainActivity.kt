@@ -2,10 +2,10 @@ package com.tomrinne.weatherapplication
 
 import android.Manifest
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -26,9 +26,13 @@ class MainActivity : AppCompatActivity() {
             ThemeProvider(applicationContext.dataStore).getTheme()
         }
         setTheme(theme)
+
         super.onCreate(savedInstanceState)
+
         supportActionBar?.hide()
+
         setContentView(R.layout.activity_main)
+
         fragmentContainerView = findViewById(R.id.fragmentContainerView)
     }
 
@@ -51,8 +55,8 @@ class MainActivity : AppCompatActivity() {
         }
 
     private fun checkAccessToLocation() {
-        lifecycleScope.launch {
 
+        lifecycleScope.launch {
             val locationPermission = PermissionManager().checkLocationPermission(baseContext)
             val locationDataStore = DataStoreManager(dataStore).getLastLocation()
 
@@ -62,8 +66,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 supportFragmentManager.commit<ForecastFragment>(R.id.fragmentContainerView)
             }
-
         }
+
     }
 
 

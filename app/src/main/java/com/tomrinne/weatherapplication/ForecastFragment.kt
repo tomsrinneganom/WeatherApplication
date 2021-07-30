@@ -15,14 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.color.MaterialColors
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.tomrinne.weatherapplication.adapter.DetailedForecastAdapter
 import com.tomrinne.weatherapplication.adapter.ForecastForDaysOfTheWeekAdapter
 import com.tomrinne.weatherapplication.adapter.HourlyForecastAdapter
 import com.tomrinne.weatherapplication.data.CurrentForecast
 import com.tomrinne.weatherapplication.data.ForecastForDaysOfTheWeek
-import com.tomrinne.weatherapplication.data.detailedforecast.DetailForecast
 import com.tomrinne.weatherapplication.extensions.collect
 import com.tomrinne.weatherapplication.extensions.recreateSmoothly
 import dagger.hilt.android.AndroidEntryPoint
@@ -78,12 +75,9 @@ class ForecastFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        viewModel.getLocality(requireContext()).onEach {
-            localityTextView?.text = it
-        }.collect(lifecycle)
+
 
         getForecast()
-
     }
 
     private fun initSwipeRefresh(view: View) {
@@ -95,7 +89,9 @@ class ForecastFragment : Fragment() {
             R.attr.colorBackgroundSecondary))
 
         swipeRefreshLayout.setOnRefreshListener {
-
+            getForecast()
+            getLocality()
+            swipeRefreshLayout.isRefreshing = false
         }
     }
 
@@ -106,7 +102,6 @@ class ForecastFragment : Fragment() {
     }
 
     private fun updateCurrentWeather(forecast: CurrentForecast) {
-        test(forecast)
         detailedForecastAdapter?.update(forecast.forecastForTheDay.detailForecastList)
         hourlyForecastAdapter?.updateList(forecast.hourlyForecast)
 
@@ -133,6 +128,12 @@ class ForecastFragment : Fragment() {
         hourlyForecastAdapter?.updateList(forecast.hourlyForecast)
     }
 
+    private fun getLocality() {
+        viewModel.getLocality(requireContext()).onEach {
+            localityTextView?.text = it
+        }.collect(lifecycle)
+    }
+
     private fun getForecast() {
 
         viewModel.getForecast(requireContext())
@@ -154,13 +155,6 @@ class ForecastFragment : Fragment() {
             }
         }.collect(lifecycle)
 
-    }
-
-    private fun test(currentForecast: CurrentForecast) {
-        val list = currentForecast.forecastForTheDay.detailForecastList
-       val typeToken = object :TypeToken<List<DetailForecast>>() {}.type
-        val gson = Gson().toJsonTree(list, typeToken)
-        Log.i("Log_tag", "$gson")
     }
 }
 
