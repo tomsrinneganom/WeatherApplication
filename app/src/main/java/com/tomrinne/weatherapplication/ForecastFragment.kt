@@ -74,9 +74,7 @@ class ForecastFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
-
-
+        getLocality()
         getForecast()
     }
 
