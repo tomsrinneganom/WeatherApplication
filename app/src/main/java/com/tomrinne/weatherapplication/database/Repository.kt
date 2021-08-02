@@ -2,11 +2,12 @@ package com.tomrinne.weatherapplication.database
 
 import android.content.Context
 import android.location.Location
-import android.util.Log
 import com.tomrinne.weatherapplication.data.CurrentForecast
 import com.tomrinne.weatherapplication.data.ForecastForDaysOfTheWeek
 import com.tomrinne.weatherapplication.database.localdatabase.ILocalDatabaseProvider
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -20,6 +21,7 @@ class Repository @Inject constructor(
     ): Flow<CurrentForecast> {
         return flow {
             emit(localDatabaseProvider.getCurrentForecast(context))
+
             locationFlow.collect { location ->
                 if (location != null) {
                     val resultFromDatabase =
@@ -30,17 +32,17 @@ class Repository @Inject constructor(
                     }
                 }
             }
-        }
 
+        }
     }
 
     suspend fun getForecastForTheDay(
         locationFlow: Flow<Location?>,
         context: Context,
     ): Flow<List<ForecastForDaysOfTheWeek>> {
-
         return flow {
             emit(localDatabaseProvider.getForecastForDaysOfTheWeek(context))
+
             locationFlow.collect { location ->
                 if (location != null) {
                     val resultFromDatabase =
@@ -52,6 +54,7 @@ class Repository @Inject constructor(
                     }
                 }
             }
+
         }
 
     }
@@ -59,7 +62,8 @@ class Repository @Inject constructor(
     suspend fun getForecastForTheDayFromLocalDatabase(context: Context): List<ForecastForDaysOfTheWeek> {
         return localDatabaseProvider.getForecastForDaysOfTheWeek(context)
     }
-    suspend fun getCurrentForecastFromLocalDatabase(context: Context):CurrentForecast{
+
+    suspend fun getCurrentForecastFromLocalDatabase(context: Context): CurrentForecast {
         return localDatabaseProvider.getCurrentForecast(context)
     }
 

@@ -103,7 +103,6 @@ class ForecastFragment : Fragment() {
         detailedForecastAdapter?.update(forecast.forecastForTheDay.detailForecastList)
         hourlyForecastAdapter?.updateList(forecast.hourlyForecast)
 
-
         cardView?.let {
             it.isClickable = true
             it.setOnClickListener {
@@ -154,5 +153,6 @@ class ForecastFragment : Fragment() {
         }.collect(lifecycle)
 
     }
+
 }
 
